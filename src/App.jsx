@@ -4,6 +4,7 @@ import ChatPanel from './components/ChatPanel';
 import DashboardPanel from './components/DashboardPanel';
 import ChartModal from './components/ChartModal';
 import VisualizationView from './components/VisualizationView';
+import DataSourcePanel from './components/DataSourcePanel';
 import './styles.css';
 
 function App() {
@@ -13,7 +14,8 @@ function App() {
   const [insights, setInsights] = useState(null);
   const [generatedCharts, setGeneratedCharts] = useState([]);
   const [selectedChart, setSelectedChart] = useState(null);
-  const [initialTab, setInitialTab] = useState('visualization'); 
+  const [initialTab, setInitialTab] = useState('visualization');
+  const [isConnected, setIsConnected] = useState(false);
 
   const handleQueryResult = (data, queryInsights) => {
     setCurrentData(data);
@@ -43,7 +45,7 @@ function App() {
   };
 
   const handleExpandTable = () => {
-    
+
     const tableChart = {
       id: Date.now(),
       type: 'table',
@@ -52,7 +54,7 @@ function App() {
       createdAt: new Date(),
     };
     setSelectedChart(tableChart);
-    setInitialTab('table'); 
+    setInitialTab('table');
     setActiveView('visualization');
   };
 
@@ -67,15 +69,35 @@ function App() {
     }
   };
 
-  return (
-    <div className="app-layout">
-      <Sidebar
-        generatedCharts={generatedCharts}
-        onViewChange={handleViewChange}
-      />
+  const handleConnectionChange = (connected) => {
+    setIsConnected(connected);
+  };
 
-      <main className="main-content">
-        {activeView === 'chat' ? (
+  const renderMainContent = () => {
+    switch (activeView) {
+      case 'dataSource':
+        return (
+          <DataSourcePanel
+            onBack={() => setActiveView('chat')}
+            onConnectionChange={handleConnectionChange}
+          />
+        );
+      case 'visualization':
+        return (
+          <VisualizationView
+            chart={selectedChart}
+            data={selectedChart?.data || currentData}
+            initialTab={initialTab}
+            onBack={() => setActiveView('chat')}
+            onNewAnalysis={() => {
+              setActiveView('chat');
+              setSelectedChart(null);
+            }}
+          />
+        );
+      case 'chat':
+      default:
+        return (
           <>
             <ChatPanel
               onQueryResult={handleQueryResult}
@@ -87,18 +109,19 @@ function App() {
               onExpandTable={handleExpandTable}
             />
           </>
-        ) : (
-          <VisualizationView
-            chart={selectedChart}
-            data={selectedChart?.data || currentData}
-            initialTab={initialTab}
-            onBack={() => setActiveView('chat')}
-            onNewAnalysis={() => {
-              setActiveView('chat');
-              setSelectedChart(null);
-            }}
-          />
-        )}
+        );
+    }
+  };
+
+  return (
+    <div className="app-layout">
+      <Sidebar
+        generatedCharts={generatedCharts}
+        onViewChange={handleViewChange}
+      />
+
+      <main className="main-content">
+        {renderMainContent()}
       </main>
 
       {showChartModal && (

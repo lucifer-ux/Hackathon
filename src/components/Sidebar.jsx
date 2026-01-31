@@ -1,6 +1,7 @@
 import {
     BarChart3,
-    History
+    History,
+    Database
 } from 'lucide-react';
 
 export default function Sidebar({ generatedCharts, onViewChange }) {
@@ -19,6 +20,21 @@ export default function Sidebar({ generatedCharts, onViewChange }) {
                         <h1>Analyst Pro</h1>
                     </div>
                 </div>
+            </div>
+
+            {/* Data Sources Button */}
+            <div className="sidebar-nav">
+                <div style={{ padding: '0 12px 8px', fontSize: '11px', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase' }}>
+                    Data Management
+                </div>
+                <button
+                    onClick={() => onViewChange?.('dataSource')}
+                    className="nav-item"
+                    style={{ fontSize: '13px' }}
+                >
+                    <Database size={16} />
+                    <span>Data Sources</span>
+                </button>
             </div>
 
             {/* Generated Charts History */}
