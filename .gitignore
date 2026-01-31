@@ -40,3 +40,14 @@ coverage
 # Misc
 *.log
 .env.example
+
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python cache / compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

@@ -3,6 +3,7 @@ import {
     History,
     Database
 } from 'lucide-react';
+import NexlaConnectButton from './NexlaConnectButton';
 
 export default function Sidebar({ generatedCharts, onViewChange }) {
     return (
@@ -19,6 +20,9 @@ export default function Sidebar({ generatedCharts, onViewChange }) {
                     <div className="sidebar-brand-text">
                         <h1>Analyst Pro</h1>
                     </div>
+                </div>
+                <div className="mt-6 px-3">
+                    <NexlaConnectButton />
                 </div>
             </div>
 
